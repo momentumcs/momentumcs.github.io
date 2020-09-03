@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+
+
+
+    <title>Mouse Practice</title>
+    <style>
+        body {
+            display: flex;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        #test {
+            display: flex;
+            position: relative;
+            right: 300px;
+            justify-content: center;
+            align-items: center;
+            background-color: green;
+            width: 300px;
+            height: 200px;
+        }
+        
+        #test2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            right: 200px;
+            background-color: blue;
+            width: 300px;
+            height: 200px;
+        }
+        
+        #rightclick {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            left: 200px;
+            background-color: cyan;
+            width: 300px;
+            height: 200px;
+        }
+        
+        #mydiv {
+            position: absolute;
+            z-index: 9;
+            background-color: #f1f1f1;
+            border: 1px solid #d3d3d3;
+            text-align: center;
+        }
+        
+        #mydivheader {
+            padding: 10px;
+            cursor: move;
+            z-index: 10;
+            background-color: #2196F3;
+            color: #fff;
+        }
+    </style>
+    <script>
+        window.console = window.console || function(t) {};
+    </script>
+    <script>
+        if (document.location.search.match(/type=embed/gi)) {
+            window.parent.postMessage("resize", "*");
+        }
+    </script>
+</head>
+
+<body translate="no">
+    <div>
+        <div>Use the boxes below to practice the four types of clicks shown in the video. Make sure you are comfortable with all four methods before moving on.</div> <br><br>
+        <div id="test">Click Me</div>
+        <div id="test2">Double Click Me</div>
+        <div id="mydiv">
+
+            <div id="mydivheader">Click here to move</div>
+            <p>Move</p>
+            <p>this</p>
+            <p>rectangle</p>
+        </div>
+        <div id="rightclick">Right Click Here</div>
+    </div>
+    <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js"></script>
+    <script id="rendered-js">
+        var bg = document.querySelector("#test");
+        var bgdbl = document.querySelector("#test2");
+        var bgright = document.querySelector("#rightclick");
+
+        function modbg() {
+            var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            bg.style.backgroundColor = "#" + randomColor;
+        }
+
+        function modbg2(e) {
+            var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            bgdbl.style.backgroundColor = "#" + randomColor;
+            e.preventDefault();
+        }
+
+        function modbg3(e) {
+
+            var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            bgright.style.backgroundColor = "#" + randomColor;
+            e.preventDefault();
+        }
+
+        bg.addEventListener("click", modbg);
+        bgdbl.addEventListener("dblclick", modbg2);
+        bgright.addEventListener("contextmenu", modbg3, false);
+        dragElement(document.getElementById("mydiv"));
+
+        function dragElement(elmnt) {
+            var pos1 = 0,
+                pos2 = 0,
+                pos3 = 0,
+                pos4 = 0;
+            if (document.getElementById(elmnt.id + "header")) {
+                // if present, the header is where you move the DIV from:
+                document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+            } else {
+                // otherwise, move the DIV from anywhere inside the DIV:
+                elmnt.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // set the element's new position:
+                elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+                elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+            }
+
+            function closeDragElement() {
+                // stop moving when mouse button is released:
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
